@@ -1,0 +1,22 @@
+@if (wishes.length === 0) {
+<div>There are no wishes to display</div>
+} @else {
+<ul class="wish-list">
+  @for (item of wishes; track $index) {
+  <li>
+    <div class="form-check">
+      <label for="" class="form-check-label">
+        <input
+          type="checkbox"
+          class="checkbox"
+          [checked]="item.isComplete"
+          [attr.data-index]="$index"
+          (click)="toggleItem(item)"
+        />
+        {{ item.wishText }}
+      </label>
+    </div>
+  </li>
+  }
+</ul>
+}
