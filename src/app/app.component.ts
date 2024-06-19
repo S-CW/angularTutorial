@@ -28,5 +28,5 @@ export class AppComponent {
     new WishItem('Learn Python', true),
   ];
 
-  filter: any = () => {};
+  filtered: any = () => {};
 }
