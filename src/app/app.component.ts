@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WishItem } from './models/wishItem';
 import { FormsModule } from '@angular/forms';
 import { WishListComponent } from './component/wish-list/wish-list.component';
 import { AddWishFormComponent } from './component/add-wish-form/add-wish-form.component';
 import { WishFilterComponent } from './component/wish-filter/wish-filter.component';
+import { EventService } from './services/event.service';
+import { WishService } from './services/wish.service';
+import { TestService } from '../test.service';
+import { Observable, catchError, debounceTime, filter, map, switchMap, throwError } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -15,18 +20,45 @@ import { WishFilterComponent } from './component/wish-filter/wish-filter.compone
     WishListComponent,
     AddWishFormComponent,
     WishFilterComponent,
+    AsyncPipe
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
-  items: WishItem[] = [
-    new WishItem('Laundry'),
-    new WishItem('Play games', true),
-    new WishItem('Learn Angular', true),
-    new WishItem('Learn Java', true),
-    new WishItem('Learn Python', true),
-  ];
+export class AppComponent implements OnInit {
+  items!: WishItem[];
 
-  filtered: any = () => {};
+  //create an obs so we can store the value
+  value$!: Observable<any>
+  // number!: number;
+
+  constructor(events: EventService, private wishService: WishService,
+    private testService: TestService
+  ) {
+    events.listen('removeWish', (wish: any) => {
+      let index = this.items.indexOf(wish);
+      this.items.splice(index, 1);
+    });
+
+    this.value$ = this.testService.number$.pipe(
+      filter(number => number > 99),
+      catchError(err => {
+       return throwError(err)
+      }),
+      debounceTime(200);
+      );
+
+    // this.value$.subscribe((number) => {
+    //   this.number = number;
+    // })
+
+  }
+
+  ngOnInit(): void {
+    this.wishService.getWishes().subscribe((data: any) => {
+      this.items = data;
+    });
+  }
+
+  filtered: any;
 }

@@ -4,8 +4,7 @@
 <ul class="wish-list">
   @for (wish of wishes; track wish.id) {
   <wish-list-item
-    [wishText]="wish.wishText"
-    [(fulfilled)]="wish.isComplete"
+    [wish]="wish"
   ></wish-list-item>
   }
 </ul>
