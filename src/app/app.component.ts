@@ -24,6 +24,8 @@ export class AppComponent {
     new WishItem('Laundry'),
     new WishItem('Play games', true),
     new WishItem('Learn Angular', true),
+    new WishItem('Learn Java', true),
+    new WishItem('Learn Python', true),
   ];
 
   filter: any = () => {};

@@ -1,4 +1,10 @@
 export class WishItem {
-  constructor(public wishText: string, public isComplete: boolean = false) {}
+  private static lastId: number = 0;
+  public readonly id: number;
+
+  constructor(public wishText: string, public isComplete: boolean = false) {
+    WishItem.lastId++;
+    this.id = WishItem.lastId;
+  }
 
 }
