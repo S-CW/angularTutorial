@@ -8,7 +8,15 @@ import { WishFilterComponent } from './component/wish-filter/wish-filter.compone
 import { EventService } from './services/event.service';
 import { WishService } from './services/wish.service';
 import { TestService } from '../test.service';
-import { Observable, catchError, debounceTime, filter, map, switchMap, throwError } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  debounceTime,
+  filter,
+  map,
+  switchMap,
+  throwError,
+} from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -20,19 +28,21 @@ import { AsyncPipe } from '@angular/common';
     WishListComponent,
     AddWishFormComponent,
     WishFilterComponent,
-    AsyncPipe
+    AsyncPipe,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  items!: WishItem[];
+  items: WishItem[] = [];
 
   //create an obs so we can store the value
-  value$!: Observable<any>
+  value$!: Observable<any>;
   // number!: number;
 
-  constructor(events: EventService, private wishService: WishService,
+  constructor(
+    events: EventService,
+    private wishService: WishService,
     private testService: TestService
   ) {
     events.listen('removeWish', (wish: any) => {
@@ -41,24 +51,28 @@ export class AppComponent implements OnInit {
     });
 
     this.value$ = this.testService.number$.pipe(
-      filter(number => number > 99),
-      catchError(err => {
-       return throwError(err)
+      filter((number) => number > 99),
+      catchError((err) => {
+        return throwError(err);
       }),
-      debounceTime(200);
-      );
+      debounceTime(200)
+    );
 
     // this.value$.subscribe((number) => {
     //   this.number = number;
     // })
-
   }
 
   ngOnInit(): void {
-    this.wishService.getWishes().subscribe((data: any) => {
-      this.items = data;
-    });
+    this.wishService.getWishes().subscribe(
+      (data: any) => {
+        this.items = data;
+      },
+      (error: any) => {
+        alert(error.message);
+      }
+    );
   }
 
-  filtered: any;
+  filtered: any = () => {};
 }

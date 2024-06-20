@@ -4,7 +4,9 @@
   <div class="row mt-3">
     <wish-filter [(filter)]="filtered"></wish-filter>
   </div>
-{{value$ | async}}
+
+  <!-- {{ value$ | async }} -->
+
   <div class="row mt-3">
     <div class="col-sm-4">
       <wish-list [wishes]="items.filter(filtered)"></wish-list>
