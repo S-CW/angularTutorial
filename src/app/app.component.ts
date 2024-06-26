@@ -4,19 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { WishListComponent } from './component/wish-list/wish-list.component';
 import { AddWishFormComponent } from './component/add-wish-form/add-wish-form.component';
 import { WishFilterComponent } from './component/wish-filter/wish-filter.component';
-import { TestService } from '../test.service';
-import {
-  Observable,
-  catchError,
-  debounceTime,
-  filter,
-  map,
-  switchMap,
-  throwError,
-} from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { WishComponent } from './component/wish/wish.component';
 import { ContactComponent } from './component/contact/contact.component';
+import { EventService } from './services/event.service';
+import { WishService } from './services/wish.service';
+import { WishItem } from './models/wishItem';
 
 @Component({
   selector: 'app-root',
@@ -25,33 +18,37 @@ import { ContactComponent } from './component/contact/contact.component';
     RouterOutlet,
     AsyncPipe,
     WishComponent,
-    ContactComponent
+    ContactComponent,
+    AddWishFormComponent,
+    WishFilterComponent,
+    WishListComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  //create an obs so we can store the value
-  value$!: Observable<any>;
-  // number!: number;
+  items: WishItem[] = [];
 
-  // this.value$.subscribe((number) => {
-  //   this.number = number;
-  // })
-
-  constructor(private testService: TestService) {
-    this.value$ = this.testService.number$.pipe(
-      filter((number) => number > 99),
-      catchError((err) => {
-        return throwError(err);
-      }),
-      debounceTime(200)
-    );
+  constructor(
+    events: EventService,
+    private wishService: WishService
+  ) {
+    events.listen('removeWish', (wish: any) => {
+      let index = this.items.indexOf(wish);
+      this.items.splice(index, 1);
+    });
   }
 
   ngOnInit(): void {
-
+    this.wishService.getWishes().subscribe(
+      (data: any) => {
+        this.items = data;
+      },
+      (error: any) => {
+        alert(error.message);
+      }
+    );
   }
 
-
+  filtered: any = () => {};
 }

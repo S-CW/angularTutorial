@@ -3,7 +3,6 @@ import { WishItem } from '../../models/wishItem';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { EventService } from '../../services/event.service';
-import { TestService } from '../../../test.service';
 
 @Component({
   selector: 'wish-list-item',
@@ -22,7 +21,7 @@ export class WishListItemComponent {
     return { 'strikeout text-muted': this.wish.isComplete };
   }
 
-  constructor(private events: EventService, private testService: TestService) { }
+  constructor(private events: EventService) { }
 
   removeWish() {
     this.events.emit('removeWish', this.wish);
@@ -30,9 +29,5 @@ export class WishListItemComponent {
 
   toggleFulfilled() {
     this.wish.isComplete = !this.wish.isComplete;
-  }
-
-  send() {
-    this.testService.sendNumber();
   }
 }
