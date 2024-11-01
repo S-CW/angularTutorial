@@ -1,0 +1,7 @@
+[
+  { "id": 1, "wishText": "Learn Angular!", "isComplete": false },
+  { "id": 2, "wishText": "Get Coffee", "isComplete": true },
+  { "id": 3, "wishText": "Find grass that cuts itself", "isComplete": false },
+  { "id": 4, "wishText": "Be a pokemon master", "isComplete": false },
+  { "id": 5, "wishText": "Get Rich", "isComplete": false }
+]
